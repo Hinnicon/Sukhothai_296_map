@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my firt leaflet</title>
+    <!-- link css leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <!-- linlk js leaflet -->
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+ integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+ crossorigin=""></script>
+ <style>
+    body {
+    padding: 0;
+    margin: 0;
+    }
+    
+    html,
+    body,
+    #map {
+    height: 100%;
+    width: 100%;
+    }
+    </style>
+    
+</head>
+<body>
+    <!-- แบ่งส่วนหน้าจอ -->
+    <div id="map" style="width: 100%; height: 100%"></div>
+    <script>
+        var map = L.map('map').setView([17.010693192119284, 99.82327941170865],9);
+        //import based map
+        var OSM = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+maxZoom: 18,
+attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
+}).addTo(map);
+    var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+}).addTo(map);
+var CyclOSM = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+	maxZoom: 20,
+	attribution: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+// รวม based map ทำเครื่องมือแยก based map
+    var baseLayers = {
+        "OSM" : OSM,
+        "OpenTopoMap" : OpenTopoMap,
+        "CyclOSM" : CyclOSM
+    }
+    L.control.layers(baseLayers).addTo(map);
+    //การเพิ่มข้อข้อมูลลงบนแผนที่
+    var point = L.marker([17.010693192119284, 99.82327941170865],
+{
+draggable: true, // Make the icon dragable
+title: 'สุโขทัย', // Add a title
+opacity: 1.5 // Adjust the opacity
+} 
+).addTo(map);
+// การเพิ่มวงกลม
+var point = L.circleMarker(
+[17.010693192119284, 99.82327941170865],
+{title :'Sukhothai',
+radius: 30, 
+color: "red", 
+fillColor: "blue"}
+).addTo(map);
+
+//และข้อมูลลงในแผนที่
+point.bindPopup("จังหวัดสุโขทัย</b><br>มรดกโลกล้ำเลิศ กำเนิดลายสือไทย เล่นไฟลอยกระทง ดำรงพุทธศาสนา งามตาผ้าตีนจก สังคโลกทองโบราณ สักการแม่ย่าพ่อขุน รุ่งอรุณแห่งความสุข")
+.openPopup(); 
+
+var Sukhothai = [
+["อุทยานประวัติศาสตร์สุโขทัย", 17.0190366, 99.70691174],
+["วัดมหาธาตุ", 17.0170512, 99.70375144],
+["วัดศรีชุม", 17.02738391, 99.69348972],
+["วัดสะพานหิน", 17.02429874, 99.67656019],
+["อุทยานแห่งชาติรามคำแหง", 16.82699149, 99.66902016],
+["บ้านนาต้นจั่น", 17.62064993, 99.82396586],
+["โครงการเกษตรอินทรีย์ สนามบินสุโขทัย",17.22814843, 99.82478054],
+["อุทยานประวัติศาสตร์ศรีสัชนาลัย", 17.42625536, 99.78895819],
+["วัดช้างล้อม ", 17.02133554, 99.71983326],
+["วัดพระบรมธาตุเมืองเชลียง", 17.44160846, 99.81108307],
+];
+var greenIcon = L.icon({
+iconUrl: 'Mushroom.png.png',
+
+
+iconSize: [38, 95], // size of the icon
+shadowSize: [50, 64], // size of the shadow
+iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+shadowAnchor: [4, 62], // the same for the shadow
+popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+for (var i = 0; i < Sukhothai.length; i++) {
+
+marker = new L.marker([Sukhothai[i][1], Sukhothai[i][2]], {icon: greenIcon})
+.bindPopup(Sukhothai[i][0])
+.addTo(map);
+}
+//description/Legend
+var legend = L.control({position: "bottomright"});
+legend.onAdd = function(map) {
+var div = L.DomUtil.create("div", "legend");
+div.innerHTML = 
+'<p><b>เที่ยวสุโขทัย 2567 ชิลถ่ายรูปสวยๆ</b></p><hr>' +
+'Created by นันทิศยิ่งเกียรตินนท์<br>' +
+'ID: 64103010296<br>'+
+'<img src="https://unity.swu.ac.th/wp-content/uploads/2020/07/SWU_Logo_EN_Color.png" width = 20%>';
+return div;
+};
+legend.addTo(map);
+
+
+    </script>
+
+
+
+    
+</body>
+</html>
